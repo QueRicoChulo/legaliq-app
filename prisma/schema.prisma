@@ -1,0 +1,61 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum StorageType {
+  VPS
+  S3
+}
+
+model User {
+  id         String      @id @default(uuid())
+  email      String      @unique
+  workspaces Workspace[] @relation("WorkspaceMembers")
+  cases      Case[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model Workspace {
+  id        String   @id @default(uuid())
+  name      String
+  members   User[]   @relation("WorkspaceMembers")
+  cases     Case[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Case {
+  id           String     @id @default(uuid())
+  caseNumber   String?
+  title        String
+  jurisdiction String     @default("CA_SUPERIOR_COURT")
+  workspaceId  String
+  workspace    Workspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User       @relation(fields: [userId], references: [id])
+  documents    Document[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model Document {
+  id            String      @id @default(uuid())
+  fileName      String
+  fileSize      Int
+  mimeType      String
+  storageType   StorageType @default(VPS)
+  storagePath   String
+  extractedText String?     @db.Text
+  hash          String?
+  caseId        String
+  case          Case        @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}

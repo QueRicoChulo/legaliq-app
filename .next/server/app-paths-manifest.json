@@ -1,0 +1,11 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/cases/[id]/documents/upload/route": "app/api/cases/[id]/documents/upload/route.js",
+  "/api/cases/route": "app/api/cases/route.js",
+  "/api/health/route": "app/api/health/route.js",
+  "/api/workspaces/route": "app/api/workspaces/route.js",
+  "/page": "app/page.js",
+  "/dashboard/cases/[id]/page": "app/dashboard/cases/[id]/page.js",
+  "/dashboard/workspaces/[id]/page": "app/dashboard/workspaces/[id]/page.js",
+  "/dashboard/page": "app/dashboard/page.js"
+}
